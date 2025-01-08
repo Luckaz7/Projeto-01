@@ -1,5 +1,5 @@
-from projeto2.lib.estrutura import *
-from projeto2.lib.interface import *
+from docs.lib.estrutura import *
+from docs.lib.interface import *
 from time import sleep
 
 pessoas = carregar_pessoas()
