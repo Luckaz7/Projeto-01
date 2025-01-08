@@ -1,8 +1,12 @@
-from projeto2.lib.interface import *
+from docs.lib.interface import *
 import json
 
 
 def cadastrar_pessoa(pessoas):
+    """
+    -> Função para cadastrar pessoas.
+    :param pessoas: variável que contem um arquivo vazio em formato .JSON
+    """
     try:
         nome = str(input('Nome: '))
         idade = leiaInt('Idade: ')
@@ -14,6 +18,11 @@ def cadastrar_pessoa(pessoas):
 
 
 def salvar_pessoa(pessoas, arquivo='pessoas.json'):
+    """
+    -> Função para salvar no arquivo .JSON as pessoas cadastradas na função cadastrar_pessoas.
+    :param pessoas: pessoas cadastradas.
+    :param arquivo: arquivo .JSON que armazena os dados da pessoa cadastrada.
+    """
     try:
         with open(arquivo, 'w') as f:
             json.dump(pessoas, f, indent=4)
@@ -24,6 +33,11 @@ def salvar_pessoa(pessoas, arquivo='pessoas.json'):
 
 
 def carregar_pessoas(arquivo='pessoas.json'):
+    """
+    -> Função para carregar e mostrar as pessoas cadastradas e armazenadas no arquivo .JSON
+    :param arquivo: arquivo .JSON utilizado para armazenas as pessoas cadastradas.
+    :return: retorna o arquivo criado com o seu conteúdo dentro(se houve), se não, cria um novo vazio.
+    """
     try:
         with open(arquivo, 'r') as f:
             return json.load(f)
