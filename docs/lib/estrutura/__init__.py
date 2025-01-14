@@ -1,3 +1,5 @@
+import os.path
+
 from docs.lib.interface import *
 import json
 
@@ -10,7 +12,8 @@ def cadastrar_pessoa(pessoas):
     try:
         nome = str(input('Nome: '))
         idade = leiaInt('Idade: ')
-        pessoas[nome] = {'idade': idade}
+        telefone = leiaInt('DDD + Telefone: ')
+        pessoas[nome] = {'idade': idade, 'Telefone': telefone}
     except Exception as e:
         print(f'Houve um problema no cadastro: {e}!')
     else:
@@ -47,3 +50,16 @@ def carregar_pessoas(arquivo='pessoas.json'):
     except json.JSONDecodeError as e:
         print(f'Erro ao carregar os dados: {e}')
         return {}
+
+
+def limpar_dados(arquivo='pessoas.json'):
+    try:
+        if os.path.exists(arquivo):
+            with open(arquivo, 'w') as f:
+                json.dump({}, f, indent=4)
+            print('Todos os registros foram deletados com sucesso!')
+        else:
+            print('Nenhum arquivo encotrado para limpar')
+    except Exception as e:
+        print(f'Ocorreu um erro ao limpar os dados: {e}')
+
