@@ -24,7 +24,7 @@ def linha(tam=42):
     return '-' * tam
 
 
-def cabeçalho(txt):
+def cabecalho(txt):
     """
     -> Função que gera um cabeçalho de texto quando chamada.
     :param txt: recebe um texto informado pelo usuário para ser utilizado como cabeçalho.
@@ -40,7 +40,7 @@ def menu(lista):
     :param lista: lista com as opções a serem escolhidas pelo usuário.
     :return: retorna a opção informada pelo usuário.
     """
-    cabeçalho('Menu principal')
+    cabecalho('Menu principal')
     c = 1
     for item in lista:
         print(f'{c} - {item}')
