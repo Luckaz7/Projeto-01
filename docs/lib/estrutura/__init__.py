@@ -53,6 +53,10 @@ def carregar_pessoas(arquivo='pessoas.json'):
 
 
 def limpar_dados(arquivo='pessoas.json'):
+    """
+    -> Função para limpar os dados cadastrados.
+    :param arquivo: arquivo .Json com os dados de todas as pessoas cadastradas.
+    """
     try:
         if os.path.exists(arquivo):
             with open(arquivo, 'w') as f:
