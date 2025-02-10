@@ -1,27 +1,29 @@
 from docs.lib.estrutura import *
-from docs.lib.interface import *
 from time import sleep
 
-pessoas = carregar_pessoas()
+criar_tabela()
 
 while True:
-    resposta = menu(['Cadastrar Pessoa', 'Mostrar pessoas cadastradas', 'Limpar dados', 'Salvar e sair'])
-    if resposta == 1:
-        cadastrar_pessoa(pessoas)
-    elif resposta == 2:
-        if pessoas:
-            cabecalho('Pessoas Cadastradas:')
-            for nome, dados in pessoas.items():
-                print(f"{nome:<13}{dados['idade']:>3} anos{dados['Telefone']:>20}")
-        else:
-            print('Nenhuma pessoa cadastrada.')
-        print()
-    elif resposta == 3:
-        limpar_dados()
-        pessoas.clear()
-    elif resposta == 4:
-        salvar_pessoa(pessoas)
-        print('Encerrando o sistema...Até logo!')
+    opcao = menu(['Cadastrar pessoa', 'Mostrar pessoas cadastradas', 'Atualizar dados', 'Excluir pessoa', 'Sair'])
+    if opcao == 1:
+        nome = str(input('Nome: '))
+        idade = leiaInt('Idade: ')
+        telefone = leiaInt('DDD + Telefone: ')
+        cadastrar_pessoa(nome, idade, telefone)
+    elif opcao == 2:
+        listar_pessoas()
+    elif opcao == 3:
+        listar_pessoas()
+        id = leiaInt('Digite o ID da pessoa a ser atualizada: ')
+        novo_nome = str(input('Novo nome: '))
+        nova_idade = leiaInt('Nova idade: ')
+        atualizar_pessoa(id, novo_nome, nova_idade)
+    elif opcao == 4:
+        listar_pessoas()
+        id = leiaInt('Digite o ID da pessoa a ser excluida: ')
+        excluir_pessoa(id)
+    elif opcao == 5:
+        cabecalho('Encerrando o sistema...Até logo!')
         break
     else:
         print('Opção inválida! Tente novamente.\n')

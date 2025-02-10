@@ -1,69 +1,75 @@
-import os.path
-
 from docs.lib.interface import *
-import json
+import sqlite3
 
 
-def cadastrar_pessoa(pessoas):
-    """
-    -> Função para cadastrar pessoas.
-    :param pessoas: variável que contem um arquivo vazio em formato .JSON
-    """
+def conectar():
+    return sqlite3.connect('cadastro.db')
+
+
+def criar_tabela():
+    conexao = conectar()
+    cursor = conexao.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS pessoas (
+            id INTEGER PRIMARY KEY, 
+            nome TEXT NOT NULL,
+            idade INTEGER NOT NULL,
+            telefone INTEGER NOT NULL
+        )
+    ''')
+    conexao.commit()
+    conexao.close()
+
+
+def cadastrar_pessoa(nome, idade, telefone):
     try:
-        nome = str(input('Nome: '))
-        idade = leiaInt('Idade: ')
-        telefone = leiaInt('DDD + Telefone: ')
-        pessoas[nome] = {'idade': idade, 'Telefone': telefone}
+        conexao = conectar()
+        cursor = conexao.cursor()
+        cursor.execute("INSERT INTO pessoas (nome, idade, telefone) VALUES (?, ?, ?)", (nome, idade, telefone))
+        conexao.commit()
+        conexao.close()
+        print(f'Pessoa {nome} cadastrada com sucesso!')
     except Exception as e:
-        print(f'Houve um problema no cadastro: {e}!')
-    else:
-        print(f'Pessoa {nome} cadastrada com sucesso!\n')
+        cabecalho(f'Erro ao cadastrar pessoa: {e}')
 
 
-def salvar_pessoa(pessoas, arquivo='pessoas.json'):
-    """
-    -> Função para salvar no arquivo .JSON as pessoas cadastradas na função cadastrar_pessoas.
-    :param pessoas: pessoas cadastradas.
-    :param arquivo: arquivo .JSON que armazena os dados da pessoa cadastrada.
-    """
+def listar_pessoas():
     try:
-        with open(arquivo, 'w') as f:
-            json.dump(pessoas, f, indent=4)
-    except IOError as e:
-        print(f'Houve um problema no salvamento dos dados!: {e}')
-    else:
-        print('Dados salvos com sucesso!')
+        conexao = conectar()
+        cursor = conexao.cursor()
+        cursor.execute('SELECT * FROM pessoas')
+        resultados = cursor.fetchall()
+        conexao.close()
 
-
-def carregar_pessoas(arquivo='pessoas.json'):
-    """
-    -> Função para carregar e mostrar as pessoas cadastradas e armazenadas no arquivo .JSON
-    :param arquivo: arquivo .JSON utilizado para armazenas as pessoas cadastradas.
-    :return: retorna o arquivo criado com o seu conteúdo dentro(se houve), se não, cria um novo vazio.
-    """
-    try:
-        with open(arquivo, 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        print('Arquivo não encontrado! Criando novo cadastro.')
-        return {}
-    except json.JSONDecodeError as e:
-        print(f'Erro ao carregar os dados: {e}')
-        return {}
-
-
-def limpar_dados(arquivo='pessoas.json'):
-    """
-    -> Função para limpar os dados cadastrados.
-    :param arquivo: arquivo .Json com os dados de todas as pessoas cadastradas.
-    """
-    try:
-        if os.path.exists(arquivo):
-            with open(arquivo, 'w') as f:
-                json.dump({}, f, indent=4)
-            print('Todos os registros foram deletados com sucesso!')
+        if resultados:
+            cabecalho('Pessoas cadastradas:')
+            for pessoa in resultados:
+                print(f'ID: {pessoa[0]}, Nome: {pessoa[1]}, Idade: {pessoa[2]}, Telefone: {pessoa[3]}')
         else:
-            print('Nenhum arquivo encotrado para limpar')
+            print('Nenhuma pessoa cadastrada.')
     except Exception as e:
-        print(f'Ocorreu um erro ao limpar os dados: {e}')
+        cabecalho(f'Erro ao listar pessoas: {e}')
 
+
+def atualizar_pessoa(id, novo_nome, nova_idade):
+    try:
+        conexao = conectar()
+        cursor = conexao.cursor()
+        cursor.execute('UPDATE pessoas SET nome = ? WHERE id = ?', (novo_nome, nova_idade, id))
+        conexao.commit()
+        conexao.close()
+        print('Dados atualizados com sucesso!')
+    except Exception as e:
+        print(f'Erro ao atualizar pessoa: {e}')
+
+
+def excluir_pessoa(id):
+    try:
+        conexao = conectar()
+        cursor = conexao.cursor()
+        cursor.execute('DELETE FROM pessoas WHERE id = ?', (id,))
+        conexao.commit()
+        conexao.close()
+        print('Pessoa excluída com sucesso.')
+    except Exception as e:
+        cabecalho(f'Erro ao excluir pessoa: {e}')

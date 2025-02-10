@@ -34,17 +34,18 @@ def cabecalho(txt):
     print(linha())
 
 
-def menu(lista):
+def menu(opcoes):
     """
     -> Função que gera um menu interativo com opções ao usuário.
-    :param lista: lista com as opções a serem escolhidas pelo usuário.
     :return: retorna a opção informada pelo usuário.
     """
     cabecalho('Menu principal')
-    c = 1
-    for item in lista:
-        print(f'{c} - {item}')
-        c += 1
-    print(linha())
-    opc = leiaInt('Sua opção: ')
-    return opc
+    for i, opcao in enumerate(opcoes, 1):
+        print(f'{i}. {opcao}')
+
+    while True:
+        escolha = leiaInt('Escolha uma opção: ')
+        if 1 <= escolha <= len(opcoes):
+            return escolha
+        else:
+            print('Opção inválida. Tente novamente.')
